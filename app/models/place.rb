@@ -86,4 +86,26 @@ class Place
       {:$project => {_id: 1}}
     ]).to_a.map {|doc| doc[:_id].to_s}
   end
+
+  def self.create_indexes
+    collection.indexes.create_one("geometry.geolocation" => Mongo::Index::GEO2DSPHERE)
+  end
+
+  def self.remove_indexes
+    collection.indexes.drop_one("geometry.geolocation_2dsphere")
+  end
+
+  def self.near(point, max_meters = 0)
+    collection.find('geometry.geolocation' => {:$near => {:$geometry => point.to_hash, :$maxDistance => max_meters}})
+  end
+
+  def near(max_meters = 0)
+    Place.to_places(Place.near(@location.to_hash, max_meters))
+  end
+
+  def photos(offset = 0, limit = 0)
+    photos = Photo.find_photos_for_place(@id).skip(offset).limit(limit)
+    photos.map {|photo| Photo.new(photo)}
+  end
+  
 end

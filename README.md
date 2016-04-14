@@ -1763,3 +1763,4 @@ and will perform a test with different query terms.
 ```
 
 #### Last Updated: 2016-03-12
+#ruby-places-assignment

@@ -15,5 +15,5 @@ class Point
       @latitude = params[:coordinates][1]
     end
   end
-  
+
 end
